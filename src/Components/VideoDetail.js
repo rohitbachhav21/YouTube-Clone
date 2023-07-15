@@ -3,9 +3,9 @@ import { Link, useParams } from "react-router-dom";
 import ReactPlayer from "react-player";
 import { Typography, Box, Stack } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-
-import { Videos, Loader } from "./";
-import { fetchFromAPI } from "../utils/fetchFromAPI";
+import Videos from "./Videos";
+import Loader from "./Loader";
+import { fetchFromApi } from "../utils/FetchFromApi";
 
 const VideoDetail = () => {
   const [videoDetail, setVideoDetail] = useState(null);
@@ -13,14 +13,14 @@ const VideoDetail = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    fetchFromAPI(`videos?part=snippet,statistics&id=${id}`)
+    fetchFromApi(`videos?part=snippet,statistics&id=${id}`)
       .then((data) => setVideoDetail(data.items[0]))
 
-    fetchFromAPI(`search?part=snippet&relatedToVideoId=${id}&type=video`)
+    fetchFromApi(`search?part=snippet&relatedToVideoId=${id}&type=video`)
       .then((data) => setVideos(data.items))
   }, [id]);
 
-  if(!videoDetail?.snippet) return <Loader />;
+  if (!videoDetail?.snippet) return <Loader />;
 
   const { snippet: { title, channelId, channelTitle }, statistics: { viewCount, likeCount } } = videoDetail;
 
@@ -35,7 +35,7 @@ const VideoDetail = () => {
             </Typography>
             <Stack direction="row" justifyContent="space-between" sx={{ color: "#fff" }} py={1} px={2} >
               <Link to={`/channel/${channelId}`}>
-                <Typography variant={{ sm: "subtitle1", md: 'h6' }}  color="#fff" >
+                <Typography variant={{ sm: "subtitle1", md: 'h6' }} color="#fff" >
                   {channelTitle}
                   <CheckCircleIcon sx={{ fontSize: "12px", color: "gray", ml: "5px" }} />
                 </Typography>
